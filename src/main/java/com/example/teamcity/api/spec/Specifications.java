@@ -29,6 +29,7 @@ public class Specifications {
         reqBuilder.setContentType(ContentType.JSON);
         reqBuilder.setAccept(ContentType.JSON);
         reqBuilder.addFilters(List.of(new RequestLoggingFilter(), new ResponseLoggingFilter()));
+
         return reqBuilder;
     }
 

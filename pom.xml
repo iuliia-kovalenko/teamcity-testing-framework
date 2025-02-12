@@ -15,6 +15,7 @@
         <testng.version>7.10.2</testng.version>
         <rest-assured.version>5.5.0</rest-assured.version>
         <lombok.version>1.18.36</lombok.version>
+        <allure.version>2.29.0</allure.version>
     </properties>
 
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
@@ -40,7 +41,27 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+
 
     </dependencies>
+
+    <build>
+    <plugins>
+        <plugin>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-maven</artifactId>
+            <version>2.12.0</version>
+            <configuration>
+                <reportVersion>${allure.version}</reportVersion>
+                <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+            </configuration>
+        </plugin>
+    </plugins>
+    </build>
 
 </project>

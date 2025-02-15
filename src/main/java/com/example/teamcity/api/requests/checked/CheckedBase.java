@@ -12,7 +12,7 @@ import org.apache.http.HttpStatus;
 public final class CheckedBase<T extends BaseModel> extends Request implements CrudInterface {
     private final UncheckedBase uncheckedBase;
 
-    public CheckedBase(RequestSpecification spec, Endpoint endpoint, UncheckedBase uncheckedBase) {
+    public CheckedBase(RequestSpecification spec, Endpoint endpoint) {
         super(spec, endpoint);
         this.uncheckedBase = new UncheckedBase(spec, endpoint);
     }

@@ -19,15 +19,16 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
     }
 
     @Override
-    public T create(BaseModel mosel) {
+    public T create(BaseModel model) {
        var createdModel = (T) uncheckedBase
-                   .create(mosel)
+                   .create(model)
                    .then()
                    .assertThat()
                    .statusCode(HttpStatus.SC_OK)
                    .extract().as(endpoint.getModelClass());
 
         TestDataStorage.getStorage().addCreatedEntity(endpoint, createdModel);
+        System.out.println("Создаваемый объект: " + model);
         return createdModel;
     }
 
@@ -43,6 +44,7 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
 
     @Override
     public T update(String id, BaseModel model) {
+        System.out.println("Обновляемый объект: " + model);
         return (T) uncheckedBase
                    .update(id, model)
                    .then()

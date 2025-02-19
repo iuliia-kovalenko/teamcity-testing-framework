@@ -26,5 +26,4 @@ public class BaseTest {
         softy.assertAll();
         TestDataStorage.getStorage().deleteCreatedEntities();
     }
-
 }

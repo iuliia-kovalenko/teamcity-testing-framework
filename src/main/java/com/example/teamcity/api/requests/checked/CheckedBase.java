@@ -28,7 +28,6 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
                    .extract().as(endpoint.getModelClass());
 
         TestDataStorage.getStorage().addCreatedEntity(endpoint, createdModel);
-        System.out.println("Создаваемый объект: " + model);
         return createdModel;
     }
 

@@ -1,5 +1,6 @@
 package com.example.teamcity.api.enums;
 
+
 public enum RoleType {
     SYSTEM_ADMIN("SYSTEM_ADMIN"),
     PROJECT_ADMIN("PROJECT_ADMIN"),

@@ -1,13 +1,10 @@
 package com.example.teamcity.api;
 
-import com.example.teamcity.api.enums.RoleType;
-import com.example.teamcity.api.generators.TestDataGenerator;
 import com.example.teamcity.api.models.*;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
-import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
+import com.example.teamcity.api.spec.ValidationResponseSpecifications;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -34,7 +31,7 @@ public class BuildTypeTest extends BaseApiTest {
     }
 
     @Test(description = "User should not be able to create two build types with the same id", groups = {"Negative", "CRUD"})
-    public void userCreatesTwoBuildTypesWithTheSameIdTest() {
+    public void userCreatesTwoBuildTypesWithTheSameIdTest() throws InterruptedException {
         var buildRTypeWithSameId = generate(List.of(testData.getProject()), BuildType.class, testData.getBuildType().getId());
 
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
@@ -42,14 +39,13 @@ public class BuildTypeTest extends BaseApiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
+        Thread.sleep(2000);
 
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
             .create(buildRTypeWithSameId)
-            .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST)
-            .body(Matchers.containsString("The build configuration / template ID \"%s\" is already used by another configuration or template"
-                                              .formatted(testData.getBuildType().getId())));
+            .then().spec(ValidationResponseSpecifications.checkBuildTypeWithIdAlreadyExist(testData.getBuildType().getId()));
     }
 
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
@@ -57,12 +53,7 @@ public class BuildTypeTest extends BaseApiTest {
         var project = generate(Project.class);
         superUserCheckRequests.getRequest(PROJECTS).create(project);
 
-        Roles rolesUser = Roles.builder()
-                              .role(List.of(Role.builder()
-                                                .roleId(RoleType.PROJECT_ADMIN.getRoleId())
-                                                .scope("p:" + project.getId())
-                                                .build()))
-                              .build();
+        Roles rolesUser = Roles.generateRoles(Role.generateProjectAdmin(project.getId()));
 
         var createdUser = (User) superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
@@ -83,37 +74,23 @@ public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
     public void projectAdminCreatesBuildTypeForAnotherUserProjectTest() {
-        var project1 = generate(Project.class);
+        TestData testData1 = generate();
+        TestData testData2 = generate();
+        var project1 = testData1.getProject();
+        var project2 = testData2.getProject();
+        Roles rolesUser1 = Roles.generateRoles(Role.generateProjectAdmin(project1.getId()));
+        testData1.getUser().setRoles(rolesUser1);
+        Roles rolesUser2 = Roles.generateRoles(Role.generateProjectAdmin(project2.getId()));
+        testData2.getUser().setRoles(rolesUser2);
+
         superUserCheckRequests.getRequest(PROJECTS).create(project1);
-        var project2 = generate(Project.class);
         superUserCheckRequests.getRequest(PROJECTS).create(project2);
 
-        Roles rolesUser1 = Roles.builder()
-                               .role(List.of(Role.builder()
-                                                 .roleId(RoleType.PROJECT_ADMIN.getRoleId())
-                                                 .scope("p:" + project1.getId())
-                                                 .build()))
-                               .build();
+        superUserCheckRequests.getRequest(USERS).create(testData1.getUser());
+        superUserCheckRequests.getRequest(USERS).create(testData2.getUser());
 
-        Roles rolesUser2 = Roles.builder()
-                               .role(List.of(Role.builder()
-                                                 .roleId(RoleType.PROJECT_ADMIN.getRoleId())
-                                                 .scope("p:" + project2.getId())
-                                                 .build()))
-                               .build();
-
-        User user1 = TestDataGenerator.generate(User.class, rolesUser1);
-        User user2 = TestDataGenerator.generate(User.class, rolesUser2);
-
-        superUserCheckRequests.getRequest(USERS).create(user1);
-        superUserCheckRequests.getRequest(USERS).create(user2);
-
-        var buildRTypeProject1 = generate(List.of(project1), BuildType.class);
-
-        new UncheckedBase(Specifications.authSpec(user2), BUILD_TYPES)
-            .create(buildRTypeProject1)
-            .then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN)
-            .body(Matchers.containsString(("You do not have enough permissions to edit project with id: %s")
-                                              .formatted(project1.getId())));
+        new UncheckedBase(Specifications.authSpec(testData2.getUser()), BUILD_TYPES)
+            .create(testData1.getBuildType())
+            .then().spec(ValidationResponseSpecifications.checkPermissionToEditProject(project1.getId()));
     }
 }

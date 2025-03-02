@@ -14,4 +14,16 @@ import java.util.List;
 public class Steps extends BaseModel{
    private Integer count;
    private List<Step> step;
+
+   public static Steps createDefaultSteps() {
+      Step step = Step.builder()
+                      .name("Step")
+                      .properties(Properties.createDefaultProperties())
+                      .build();
+
+      return Steps.builder()
+                 .count(1)
+                 .step(List.of(step))
+                 .build();
+   }
 }

@@ -1,5 +1,6 @@
 package com.example.teamcity.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +12,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Steps extends BaseModel{
-   private Integer count;
+   @Builder.Default
+   private Integer count = 1;
    private List<Step> step;
 
    public static Steps createDefaultSteps() {

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BuildType extends BaseModel{
+public class BuildType extends BaseModel {
     @Random
     @Parameterizable
     private String id;
@@ -22,6 +22,6 @@ public class BuildType extends BaseModel{
     private String name;
     @Parameterizable
     private Project project;
+    @Parameterizable
     private Steps steps;
-
 }

@@ -21,17 +21,16 @@ public class BuildTypeTest extends BaseApiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
-
+        testData.getBuildType().setSteps(null);
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
 
         var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
 
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName(), "BuildTypeName is not correct");
-
     }
 
     @Test(description = "User should not be able to create two build types with the same id", groups = {"Negative", "CRUD"})
-    public void userCreatesTwoBuildTypesWithTheSameIdTest() throws InterruptedException {
+    public void userCreatesTwoBuildTypesWithTheSameIdTest() {
         var buildRTypeWithSameId = generate(List.of(testData.getProject()), BuildType.class, testData.getBuildType().getId());
 
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
@@ -39,7 +38,8 @@ public class BuildTypeTest extends BaseApiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
-        Thread.sleep(2000);
+
+        testData.getBuildType().setSteps(null);
 
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
 
@@ -50,10 +50,9 @@ public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
     public void projectAdminCreatesBuildTypeTest() {
-        var project = generate(Project.class);
-        superUserCheckRequests.getRequest(PROJECTS).create(project);
+        superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
-        Roles rolesUser = Roles.generateRoles(Role.generateProjectAdmin(project.getId()));
+        Roles rolesUser = Roles.generateRoles(Role.generateProjectAdmin(testData.getProject().getId()));
 
         var createdUser = (User) superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
@@ -63,7 +62,9 @@ public class BuildTypeTest extends BaseApiTest {
 
         superUserCheckRequests.getRequest(USERS).update(createdUser.getId(), createdUser);
 
-        var buildTypeProject1 = generate(List.of(project), BuildType.class);
+        var buildTypeProject1 = testData.getBuildType();
+
+        buildTypeProject1.setSteps(null);
 
         userCheckRequests.getRequest(BUILD_TYPES).create(buildTypeProject1);
 
@@ -82,6 +83,7 @@ public class BuildTypeTest extends BaseApiTest {
         testData1.getUser().setRoles(rolesUser1);
         Roles rolesUser2 = Roles.generateRoles(Role.generateProjectAdmin(project2.getId()));
         testData2.getUser().setRoles(rolesUser2);
+        testData1.getBuildType().setSteps(null);
 
         superUserCheckRequests.getRequest(PROJECTS).create(project1);
         superUserCheckRequests.getRequest(PROJECTS).create(project2);

@@ -29,5 +29,5 @@ public class StartBuildTest extends BaseApiTest {
         var passedBuild = (Build) superUserCheckRequests.getRequest(BUILD).read(runBuild.getId());
 
         softy.assertEquals(passedBuild.getStatus(), "SUCCESS", "Build is not successful");
-    }
+}
 }

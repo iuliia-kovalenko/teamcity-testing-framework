@@ -6,19 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Roles extends BaseModel {
-    private List<Role> role;
-
-    public static Roles generateRoles(Role role) {
-        return Roles.builder()
-                   .role(List.of(role))
-                   .build();
-    }
+public class Property extends BaseModel {
+    private String name;
+    private String value;
 }

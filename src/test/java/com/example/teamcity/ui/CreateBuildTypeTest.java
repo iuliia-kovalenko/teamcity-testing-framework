@@ -85,4 +85,5 @@ public class CreateBuildTypeTest extends BaseUiTest {
             .read("project:" + createdProject.getId())
             .then().spec(ValidationResponseSpecifications.checkNoBuildTypeFound(createdProject.getId()));
     }
+
 }

@@ -6,7 +6,10 @@ import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.models.Steps;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.example.teamcity.api.enums.Endpoint.*;
+import static org.awaitility.Awaitility.await;
 
 public class StartBuildTest extends BaseApiTest {
     @Test(description = "Build can be executed and completed successfully", groups = {"Positive", "CRUD"})
@@ -26,8 +29,16 @@ public class StartBuildTest extends BaseApiTest {
 
         var runBuild = (Build) superUserCheckRequests.getRequest(BUILD_QUEUE).create(build);
 
+        await()
+            .atMost(15, TimeUnit.SECONDS)
+            .pollInterval(2, TimeUnit.SECONDS)
+            .until(() -> {
+                Build currentBuild = (Build) superUserCheckRequests.getRequest(BUILD).read(runBuild.getId());
+                return "SUCCESS".equals(currentBuild.getStatus());
+            });
+
         var passedBuild = (Build) superUserCheckRequests.getRequest(BUILD).read(runBuild.getId());
 
         softy.assertEquals(passedBuild.getStatus(), "SUCCESS", "Build is not successful");
-}
+    }
 }

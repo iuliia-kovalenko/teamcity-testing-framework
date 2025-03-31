@@ -60,15 +60,17 @@ public class CreateBuildTypeTest extends BaseUiTest {
                                .inputRepoUrl(INVALID_REPO_URL)
                                .submitBuildType()
                                .getRepoUrlValidationErrorMessage();
-        softy.assertTrue(errorMessage.contains("git -c credential.helper= ls-remote origin command failed.\n" +
-                                                   "exit code: 128"));
+//        softy.assertTrue(errorMessage.contains("git -c credential.helper= ls-remote origin command failed.\n" +
+//                                                   "exit code: 128"));
+
+        ValidateElement.containsText(errorMessage, ValidateElement.UiErrors.BUILD_CONFIG_REPO_URL_MUST_BE_CORRECT, INVALID_REPO_URL);
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
             .read("project:" + createdProject.getId())
             .then().spec(ValidationResponseSpecifications.checkNoBuildTypeFound(createdProject.getId()));
     }
 
-    @Test(description = "User should not be able to create buildType without empty repo url", groups = {"Negative"})
+    @Test(description = "User should not be able to create buildType with empty repo url", groups = {"Negative"})
     public void userCreatesBuildTypeWithEmptyRepoUrl() {
         loginAs(testData.getUser());
 
@@ -79,11 +81,12 @@ public class CreateBuildTypeTest extends BaseUiTest {
                                .submitBuildType()
                                .getRepoUrlValidationErrorMessage();
 
-        softy.assertEquals(errorMessage, "URL must not be empty");
+//        softy.assertEquals(errorMessage, "URL must not be empty");
+        ValidateElement.byText(errorMessage, ValidateElement.UiErrors.BUILD_CONFIG_REPO_URL_MUST_BE_NOT_NULL);
+
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
             .read("project:" + createdProject.getId())
             .then().spec(ValidationResponseSpecifications.checkNoBuildTypeFound(createdProject.getId()));
     }
-
 }

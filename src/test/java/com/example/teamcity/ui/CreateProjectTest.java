@@ -16,9 +16,10 @@ public class CreateProjectTest extends BaseUiTest {
 
     @Test(description = "User should be able to create project", groups = {"Positive"})
     public void userCreatesProject() {
-
+        // Подготовка окружения
         loginAs(testData.getUser());
 
+        // взаимодействие с UI
         CreateProjectPage.open("_Root")
             .createForm(REPO_URL)
             .setUpProject(testData.getProject().getName(), testData.getBuildType().getName());
@@ -26,16 +27,11 @@ public class CreateProjectTest extends BaseUiTest {
 
         // Проверка состояния API
         // Корректность отправки данных с UI на API
-        step("Check that all entities: project, buildType were successfully created with correct data on API level");
-
         var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).read("name:" + testData.getProject().getName());
         softy.assertNotNull(createdProject);
 
-        ///  API: project with name, buildType for this Project with BuildType name
         // Проверка состояния UI
         // Корректность считывания данных и отображение данных на UI
-        step("Check that project is visible on Project page (http://localhost:8112/favorite/projects)");
-
         ProjectPage.open(createdProject.getId())
             .title.shouldHave(Condition.exactText(testData.getProject().getName()));
 

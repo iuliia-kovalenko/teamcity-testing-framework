@@ -28,4 +28,12 @@ public class ValidationResponseSpecifications {
                                                                    formatted(projectId)));
         return responseSpecBuilder.build();
     }
+
+    public static ResponseSpecification checkNoBuildTypeFound(String projectId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_NOT_FOUND);
+        responseSpecBuilder.expectBody(Matchers.containsString("Nothing is found by locator 'count:1,project:%s'".
+                                                                   formatted(projectId)));
+        return responseSpecBuilder.build();
+    }
 }

@@ -22,13 +22,12 @@ runs:
 
     - name: Setup host config property
       shell: bash
-      run: echo "host=$HOST:8112" >> src/main/resources/config.properties
+      run: echo "host=$HOST:8111" >> src/main/resources/config.properties
 
     - name: Pull Selenoid browsers
       shell: bash
       # Парсить browsers.json и будем docker pull все браузеры
       run: |
-        |
         for browser in $(awk -F'"' '/"image": "/{print $4}' "config/browsers.json"); do
           docker pull $browser
         done
@@ -73,7 +72,3 @@ runs:
     - name: Setup superUserToken config property
       shell: bash
       run: echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/config.properties
-
-
-
-

@@ -5,6 +5,8 @@ target/
 allure-results/
 #config.properties
 index.html
+swagger-coverage-report.html
+swagger-coverage-results.json
 
 ### IntelliJ IDEA ###
 .idea/

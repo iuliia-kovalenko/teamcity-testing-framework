@@ -19,6 +19,7 @@
         <jackson.version>2.17.2</jackson.version>
         <wiremock.version>3.9.1</wiremock.version>
         <selenide.version>7.4.3</selenide.version>
+        <swagger-coverage-version>1.5.0</swagger-coverage-version>
     </properties>
 
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
@@ -88,6 +89,11 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.viclovsky</groupId>
+            <artifactId>swagger-coverage-rest-assured</artifactId>
+            <version>${swagger-coverage-version}</version>
         </dependency>
 
 

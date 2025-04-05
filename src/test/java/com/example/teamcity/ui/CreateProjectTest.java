@@ -27,7 +27,7 @@ public class CreateProjectTest extends BaseUiTest {
 
         // Проверка состояния API
         // Корректность отправки данных с UI на API
-        var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).read("name:" + testData.getProject().getName());
+        var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).read("id:" + testData.getProject().getId());
         softy.assertNotNull(createdProject);
 
         // Проверка состояния UI

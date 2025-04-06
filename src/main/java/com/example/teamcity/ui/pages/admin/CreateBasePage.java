@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.ui.pages.BasePage;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -16,6 +17,7 @@ public abstract class CreateBasePage extends BasePage {
     protected SelenideElement conectionSuccessfulMessage = $(".connectionSuccessful");
 
 
+    @Step("Input RepoURL, Submit button")
     protected void baseCreateForm(String url) {
         urlInput.val(url);
         submitButton.click();

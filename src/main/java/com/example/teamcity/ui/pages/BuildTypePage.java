@@ -3,6 +3,7 @@ package com.example.teamcity.ui.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -13,7 +14,7 @@ public class BuildTypePage extends BasePage {
 
     private SelenideElement header = $(".MainPanel__router--gF > div");
 
-
+    @Step("Open Build type page")
     public static BuildTypePage open(String projectId, String buildTypeName) {
         return Selenide.open(BUILD_TYPE_URL.formatted(projectId + "_" + buildTypeName.replace("_", "")), BuildTypePage.class);
     }

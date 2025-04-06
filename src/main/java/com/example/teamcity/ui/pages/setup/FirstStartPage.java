@@ -5,6 +5,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.ui.pages.BasePage;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -19,10 +20,12 @@ public class FirstStartPage extends BasePage {
         restoreButton.shouldBe(Condition.visible, LONG_WAITING);
     }
 
+    @Step("Open First start page")
     public static FirstStartPage open() {
         return Selenide.open("/", FirstStartPage.class);
     }
 
+    @Step("Click proceed button, accept agreement, click submit")
     public FirstStartPage setUpFirstStart() {
         proceedButton.click();
         dbTypeSelect.shouldBe(Condition.visible, LONG_WAITING);

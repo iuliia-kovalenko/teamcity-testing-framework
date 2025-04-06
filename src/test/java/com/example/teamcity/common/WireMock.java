@@ -6,6 +6,8 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import lombok.SneakyThrows;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.common.ContentTypes.APPLICATION_JSON;
 import static com.github.tomakehurst.wiremock.common.ContentTypes.CONTENT_TYPE;
@@ -23,6 +25,11 @@ public final class WireMock {
             wireMockServer = new WireMockServer(8081);
             wireMockServer.start();
             System.out.println("WireMockServer started on port 8081");
+
+            org.awaitility.Awaitility.await()
+                .atMost(5, TimeUnit.SECONDS)
+                .pollInterval(500, TimeUnit.MILLISECONDS)
+                .until(() -> wireMockServer.isRunning());
         }
 
         var jsonModel = new ObjectMapper().writeValueAsString(model);

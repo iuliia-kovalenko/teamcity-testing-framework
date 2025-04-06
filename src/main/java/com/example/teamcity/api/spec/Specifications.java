@@ -53,7 +53,7 @@ public class Specifications {
 
     public static RequestSpecification mockSpec() {
         return reqBuilder()
-                   .setBaseUri("http://localhost:8080")
+                   .setBaseUri("http://localhost:8089")
                    .build();
     }
 }

@@ -22,9 +22,9 @@ public final class WireMock {
     @SneakyThrows
     public static void setupServer(MappingBuilder mappingBuilder, int status, BaseModel model) {
         if (wireMockServer == null) {
-            wireMockServer = new WireMockServer(8080);
+            wireMockServer = new WireMockServer(8089);
             wireMockServer.start();
-            System.out.println("WireMockServer started on port 8080");
+            System.out.println("WireMockServer started on port 8089");
 
             org.awaitility.Awaitility.await()
                 .atMost(5, TimeUnit.SECONDS)

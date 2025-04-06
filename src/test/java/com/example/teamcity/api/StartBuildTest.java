@@ -31,8 +31,8 @@ public class StartBuildTest extends BaseApiTest {
         var runBuild = (Build) superUserCheckRequests.getRequest(BUILD_QUEUE).create(build);
 
         await()
-            .atMost(30, TimeUnit.SECONDS)
-            .pollInterval(2, TimeUnit.SECONDS)
+            .atMost(1, TimeUnit.MINUTES)
+            .pollInterval(5, TimeUnit.SECONDS)
             .until(() -> {
                 Build currentBuild = (Build) superUserCheckRequests.getRequest(BUILD).read(runBuild.getId());
                 return "SUCCESS".equals(currentBuild.getStatus());

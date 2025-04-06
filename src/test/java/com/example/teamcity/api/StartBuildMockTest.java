@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import static com.example.teamcity.api.enums.Endpoint.BUILD_QUEUE;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 
-@Ignore
+
 @Feature("Start build")
 public class StartBuildMockTest extends BaseApiTest {
 
@@ -27,7 +27,7 @@ public class StartBuildMockTest extends BaseApiTest {
 
         WireMock.setupServer(post(BUILD_QUEUE.getUrl()), HttpStatus.SC_OK, fakeBuild);
     }
-
+    @Ignore
     @Test(description = "User should be able to start build (with WireMock)")
     public void userStartsBuildWithWireMockTest() {
         var checkedBuildQueueRequest = new CheckedBase<Build>(Specifications

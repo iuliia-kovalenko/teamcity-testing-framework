@@ -20,6 +20,7 @@
         <wiremock.version>3.9.1</wiremock.version>
         <selenide.version>7.4.3</selenide.version>
         <swagger-coverage-version>1.5.0</swagger-coverage-version>
+        <aspectj.version>1.9.22.1</aspectj.version>
     </properties>
 
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
@@ -122,6 +123,37 @@
 <!--                <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>-->
 <!--            </configuration>-->
 <!--        </plugin>-->
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.5.2</version>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
+                        <argLine>
+                            -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        </argLine>
+                        <systemProperties>
+                            <property>
+                                <name>allure.results.directory</name>
+                                <value>${project.build.directory}/allure-results</value>
+                            </property>
+                        </systemProperties>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjweaver</artifactId>
+                            <version>${aspectj.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>io.qameta.allure</groupId>
+                    <artifactId>allure-maven</artifactId>
+                    <version>2.15.2</version>
+                </plugin>
+
     </plugins>
     </build>
 

@@ -19,29 +19,67 @@ public final class WireMock {
     private WireMock() {
     }
 
-    @SneakyThrows
+//    @SneakyThrows
+//    public static void setupServer(MappingBuilder mappingBuilder, int status, BaseModel model) {
+//        if (wireMockServer == null) {
+//            wireMockServer = new WireMockServer(8089);
+//            wireMockServer.start();
+//            System.out.println("WireMockServer started on port 8089");
+//
+//            org.awaitility.Awaitility.await()
+//                .atMost(5, TimeUnit.SECONDS)
+//                .pollInterval(500, TimeUnit.MILLISECONDS)
+//                .until(() -> wireMockServer.isRunning());
+//        }
+//
+//        var jsonModel = new ObjectMapper().writeValueAsString(model);
+//        System.out.println("Serialized model: " + jsonModel);
+//
+//        wireMockServer.stubFor(mappingBuilder
+//                                   .willReturn(aResponse()
+//                                                   .withStatus(status)
+//                                                   .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+//                                                   .withBody(jsonModel)));
+//
+//        System.out.println("WireMock stub configured for: " + mappingBuilder);
+//    }
+
     public static void setupServer(MappingBuilder mappingBuilder, int status, BaseModel model) {
         if (wireMockServer == null) {
-            wireMockServer = new WireMockServer(8089);
-            wireMockServer.start();
-            System.out.println("WireMockServer started on port 8089");
+            try {
+                wireMockServer = new WireMockServer(8089);
+                wireMockServer.start();
+                System.out.println("WireMockServer started on port 8089");
 
-            org.awaitility.Awaitility.await()
-                .atMost(5, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .until(() -> wireMockServer.isRunning());
+                org.awaitility.Awaitility.await()
+                    .atMost(5, TimeUnit.SECONDS)
+                    .pollInterval(500, TimeUnit.MILLISECONDS)
+                    .until(() -> wireMockServer.isRunning());
+
+            } catch (Exception e) {
+                System.err.println("❌ Failed to start WireMockServer: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("WireMock failed to start", e);
+            }
         }
 
-        var jsonModel = new ObjectMapper().writeValueAsString(model);
-        System.out.println("Serialized model: " + jsonModel);
+        try {
+            var jsonModel = new ObjectMapper().writeValueAsString(model);
+            System.out.println("Serialized model: " + jsonModel);
 
-        wireMockServer.stubFor(mappingBuilder
-                                   .willReturn(aResponse()
-                                                   .withStatus(status)
-                                                   .withHeader(CONTENT_TYPE, APPLICATION_JSON)
-                                                   .withBody(jsonModel)));
+            wireMockServer.stubFor(mappingBuilder
+                                       .willReturn(aResponse()
+                                                       .withStatus(status)
+                                                       .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                                                       .withBody(jsonModel)));
 
-        System.out.println("WireMock stub configured for: " + mappingBuilder);
+            System.out.println("WireMock stub configured for: " + mappingBuilder);
+
+        } catch (Exception e) {
+            System.err.println("❌ Failed to configure WireMock stub: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("WireMock stub configuration failed", e);
+        }
     }
 
     public static void stopServer() {

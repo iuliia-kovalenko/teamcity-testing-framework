@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import static com.example.teamcity.api.enums.Endpoint.*;
 import static org.awaitility.Awaitility.await;
 
-@Test(groups = {"Regression"})
 public class StartBuildTest extends BaseApiTest {
     @Test(description = "Build can be executed and completed successfully", groups = {"Positive", "CRUD"})
     public void buildStartAndSuccessfulCompletionTest() {
@@ -31,8 +30,8 @@ public class StartBuildTest extends BaseApiTest {
         var runBuild = (Build) superUserCheckRequests.getRequest(BUILD_QUEUE).create(build);
 
         await()
-            .atMost(1, TimeUnit.MINUTES)
-            .pollInterval(5, TimeUnit.SECONDS)
+            .atMost(15, TimeUnit.SECONDS)
+            .pollInterval(2, TimeUnit.SECONDS)
             .until(() -> {
                 Build currentBuild = (Build) superUserCheckRequests.getRequest(BUILD).read(runBuild.getId());
                 return "SUCCESS".equals(currentBuild.getStatus());

@@ -6,6 +6,7 @@ import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.api.requests.CrudInterface;
 import com.example.teamcity.api.requests.Request;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
+import io.qameta.allure.Step;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 
@@ -17,7 +18,7 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
         super(spec, endpoint);
         this.uncheckedBase = new UncheckedBase(spec, endpoint);
     }
-
+    @Step("Create entity")
     @Override
     public T create(BaseModel model) {
        var createdModel = (T) uncheckedBase
@@ -31,6 +32,7 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
         return createdModel;
     }
 
+    @Step("Read data")
     @Override
     public T read(String id) {
         return (T) uncheckedBase
@@ -41,6 +43,7 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
                    .extract().as(endpoint.getModelClass());
     }
 
+    @Step("Update entity")
     @Override
     public T update(String id, BaseModel model) {
         System.out.println("Обновляемый объект: " + model);
@@ -52,6 +55,7 @@ public final class CheckedBase<T extends BaseModel> extends Request implements C
                    .extract().as(endpoint.getModelClass());
     }
 
+    @Step("Delete entity")
     @Override
     public Object delete(String id) {
         return uncheckedBase

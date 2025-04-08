@@ -4,6 +4,7 @@ import com.example.teamcity.api.enums.Endpoint;
 import com.example.teamcity.api.models.BaseModel;
 import com.example.teamcity.api.requests.CrudInterface;
 import com.example.teamcity.api.requests.Request;
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -14,6 +15,7 @@ public class UncheckedBase extends Request implements CrudInterface {
         super(spec, endpoint);
     }
 
+    @Step("Create entity")
     @Override
     public Response create(BaseModel model) {
         return RestAssured
@@ -23,6 +25,7 @@ public class UncheckedBase extends Request implements CrudInterface {
                    .post(endpoint.getUrl());
     }
 
+    @Step("Read data")
     @Override
     public Response read(String locator) {
         return RestAssured
@@ -31,6 +34,7 @@ public class UncheckedBase extends Request implements CrudInterface {
                    .get(endpoint.getUrl() + "/" + locator);
     }
 
+    @Step("Update entity")
     @Override
     public Response update(String locator, BaseModel model) {
         return RestAssured
@@ -40,6 +44,7 @@ public class UncheckedBase extends Request implements CrudInterface {
                    .put(endpoint.getUrl() + "/" + locator);
     }
 
+    @Step("Delete entity")
     @Override
     public Response delete(String locator) {
 

@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Agent extends BaseModel {
-    private boolean authorized;
+    private String id;
 }

@@ -51,11 +51,16 @@ runs:
         aerokube/selenoid-ui:latest-release \
         --selenoid-uri http://$HOST:4444
 
+    - name: Create Docker network
+      shell: bash
+      run: docker network create teamcity-net || echo "Network already exists"
+
     - name: Run Teamcity Server
       shell: bash
       # флаг -u 0 запускает контейнер от имени root, чтобы был доступ к записи файлов в директирии, которые указаны в volume
       run: |
         docker run -u 0 -d --name teamcity-server  \
+        --network teamcity-net \
         -v $(pwd)/tmp/teamcity_server/datadir:/data/teamcity_server/datadir \
         -v $(pwd)/tmp/teamcity_server/logs:/opt/teamcity/logs  \
         -p 8111:8111 \
@@ -85,6 +90,7 @@ runs:
       shell: bash
       run: |
         docker run -e SERVER_URL="http://$HOST:8111" -u 0 -d --name teamcity-agent \
+        --network teamcity-net \
         -v $(pwd)/tmp/teamcity_agent/conf:/data/teamcity_agent/conf \
         jetbrains/teamcity-agent:2023.11.1-linux-sudo
 

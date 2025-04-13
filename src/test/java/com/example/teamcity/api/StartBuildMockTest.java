@@ -8,6 +8,7 @@ import io.qameta.allure.Feature;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import static com.example.teamcity.api.enums.Endpoint.BUILD_QUEUE;
@@ -17,7 +18,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 @Feature("Start build")
 public class StartBuildMockTest extends BaseApiTest {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setupWireMockServer() {
         var fakeBuild = Build.builder()
                             .state("finished")

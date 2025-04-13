@@ -60,7 +60,6 @@ runs:
       # флаг -u 0 запускает контейнер от имени root, чтобы был доступ к записи файлов в директирии, которые указаны в volume
       run: |
         docker run -u 0 -d --name teamcity-server  \
-        --network teamcity-net \
         -v $(pwd)/tmp/teamcity_server/datadir:/data/teamcity_server/datadir \
         -v $(pwd)/tmp/teamcity_server/logs:/opt/teamcity/logs  \
         -p 8111:8111 \
@@ -89,11 +88,20 @@ runs:
     - name: Run TeamCity Agent
       shell: bash
       run: |
-        docker run -e SERVER_URL="http://$HOST:8111" -u 0 -d --name teamcity-agent \
-        --network teamcity-net \
+        docker run -u 0 -d --name teamcity-agent \
+        -e SERVER_URL=http://$HOST:8111 \
+        -e AGENT_NAME=teamcityAgentFirst \
         -v $(pwd)/tmp/teamcity_agent/conf:/data/teamcity_agent/conf \
         jetbrains/teamcity-agent:2023.11.1-linux-sudo
 
     - name: TeamCity Agent logs
       shell: bash
       run: docker logs teamcity-agent || echo "TeamCity Agent logs not available"
+
+    - name: Wait for TeamCity Agent to connect
+      shell: bash
+      run: sleep 10
+
+    - name: Setup TeamCity-Agent
+      shell: bash
+      run: ./mvnw clean test -Dtest=SetupTeamcityAgent#AgentAuthorizeTest

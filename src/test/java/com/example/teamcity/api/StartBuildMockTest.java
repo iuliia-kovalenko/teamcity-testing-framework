@@ -18,7 +18,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 @Feature("Start build")
 public class StartBuildMockTest extends BaseApiTest {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setupWireMockServer() {
         var fakeBuild = Build.builder()
                             .state("finished")

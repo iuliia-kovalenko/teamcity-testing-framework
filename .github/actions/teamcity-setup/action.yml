@@ -51,9 +51,9 @@ runs:
         aerokube/selenoid-ui:latest-release \
         --selenoid-uri http://$HOST:4444
 
-    - name: Create Docker network
-      shell: bash
-      run: docker network create teamcity-net || echo "Network already exists"
+#    - name: Create Docker network
+#      shell: bash
+#      run: docker network create teamcity-net || echo "Network already exists"
 
     - name: Run Teamcity Server
       shell: bash

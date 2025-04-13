@@ -6,9 +6,9 @@ import com.example.teamcity.api.requests.AgentsAuthRequest;
 import com.example.teamcity.api.spec.Specifications;
 import org.testng.annotations.Test;
 
-@Test(groups = {"Setup"})
+
 public class AgentAuthorizeTest extends BaseApiTest {
-    @Test(description = "Superuser should be able to authorize Teamcity Agent")
+    @Test(description = "Superuser should be able to authorize Teamcity Agent", groups = {"Setup"})
     public void authorizeAgentTest() {
         AgentsAuthRequest agentsAuthRequest = new AgentsAuthRequest(Specifications.superUserSpec(), Endpoint.AGENTS);
 

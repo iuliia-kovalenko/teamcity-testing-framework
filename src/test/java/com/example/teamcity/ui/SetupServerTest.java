@@ -4,9 +4,8 @@ import com.example.teamcity.ui.pages.setup.FirstStartPage;
 import org.testng.annotations.Test;
 
 
-@Test(groups = {"Setup"})
 public class SetupServerTest extends BaseUiTest {
-    @Test(groups = {"Setup"})
+    @Test(description = "Setup Teamcity server", groups = {"Setup"})
     private void setupTeamcityServerTest() {
         FirstStartPage.open().setUpFirstStart();
     }

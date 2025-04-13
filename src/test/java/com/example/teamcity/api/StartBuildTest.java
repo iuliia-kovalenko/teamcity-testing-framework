@@ -12,7 +12,7 @@ import static com.example.teamcity.api.enums.Endpoint.*;
 import static org.awaitility.Awaitility.await;
 
 public class StartBuildTest extends BaseApiTest {
-    @Test(description = "Build can be executed and completed successfully", groups = {"Positive", "CRUD"})
+    @Test(description = "Build can be executed and completed successfully", groups = {"Regression"})
     public void buildStartAndSuccessfulCompletionTest() {
         Steps steps = Steps.createDefaultSteps();
         BuildType buildType = testData.getBuildType();

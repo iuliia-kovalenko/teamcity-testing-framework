@@ -104,4 +104,4 @@ runs:
 
     - name: Setup TeamCity-Agent
       shell: bash
-      run: ./mvnw clean test -Dtest=SetupTeamcityAgent#AgentAuthorizeTest
+      run: ./mvnw clean test -Dtest=AgentAuthorizeTest#authorizeAgentTest

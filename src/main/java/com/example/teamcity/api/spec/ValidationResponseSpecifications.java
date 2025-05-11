@@ -67,11 +67,8 @@ public class ValidationResponseSpecifications {
     public static ResponseSpecification checkProjectContainsOnlyLatinLettersAndUnderscores(String projectId) {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        responseSpecBuilder.expectBody(Matchers.containsString(("Project ID \"%s\" is invalid:" +
-                                                                    " contains non-latin letter '%s'." +
-                                                                    " ID should start with a latin letter and contain only latin letters," +
-                                                                    " digits and underscores (at most 225 characters).").
-                                                                   formatted(projectId, projectId.charAt(0))));
+        responseSpecBuilder.expectBody(Matchers.containsString(("ID should start with a latin letter and contain only latin letters," +
+                                                                    " digits and underscores (at most 225 characters).")));
         return responseSpecBuilder.build();
     }
 

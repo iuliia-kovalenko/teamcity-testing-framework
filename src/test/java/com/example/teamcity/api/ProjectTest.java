@@ -2,10 +2,7 @@ package com.example.teamcity.api;
 
 import com.example.teamcity.api.enums.RoleType;
 import com.example.teamcity.api.generators.RandomData;
-import com.example.teamcity.api.models.Project;
-import com.example.teamcity.api.models.Role;
-import com.example.teamcity.api.models.Roles;
-import com.example.teamcity.api.models.User;
+import com.example.teamcity.api.models.*;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
@@ -17,10 +14,11 @@ import java.util.Collections;
 
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
 import static com.example.teamcity.api.enums.Endpoint.USERS;
+import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 
 @Test(groups = {"Regression"})
 public class ProjectTest extends BaseApiTest {
-    private static final int PROJECT_ID_NAME_LENGTH_LIMIT = 225;
+    private static final int PROJECT_ID_LENGTH_LIMIT = 225;
 
     @Test(description = "System admin should be able to create project", groups = {"Positive", "Crud"})
     public void systemAdminCreatesProjectTest() {
@@ -84,7 +82,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "System admin should not be able to create project with the same name", groups = {"Negative", "Crud"})
-    public void systemAdminCreatesTwoProjectsWithTheSameId() {
+    public void systemAdminCreatesTwoProjectsWithTheSameIName() {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
@@ -97,12 +95,46 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "SuperUser should not be able to create project with the same name", groups = {"Negative", "Crud"})
-    public void superUserCreatesTwoProjectsWithTheSameId() {
+    public void superUserCreatesTwoProjectsWithTheSameName() {
         superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
         new UncheckedBase(Specifications.superUserSpec(), PROJECTS)
             .create(testData.getProject())
             .then().spec(ValidationResponseSpecifications.checkProjectWithNameAlreadyExist(testData.getProject().getName()));
+    }
+
+    @Test(description = "System admin should not be able to create project with the same ID", groups = {"Negative", "Crud"})
+    public void systemAdminCreatesTwoProjectsWithTheSameId() {
+        TestData testData1 = generate();
+        TestData testData2 = generate();
+        var project1 = testData1.getProject();
+        var project2 = testData2.getProject();
+        project2.setId(project1.getId());
+
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
+        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
+
+        userCheckRequests.getRequest(PROJECTS).create(project1);
+
+        new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
+            .create(project2)
+            .then().spec(ValidationResponseSpecifications.checkProjectWithIdAlreadyExist(project2.getId()));
+    }
+
+    @Test(description = "SuperUser should not be able to create project with the same ID", groups = {"Negative", "Crud"})
+    public void superUserCreatesTwoProjectsWithTheSameId() {
+        TestData testData1 = generate();
+        TestData testData2 = generate();
+        var project1 = testData1.getProject();
+        var project2 = testData2.getProject();
+        project2.setId(project1.getId());
+
+        superUserCheckRequests.getRequest(PROJECTS).create(project1);
+
+        new UncheckedBase(Specifications.superUserSpec(), PROJECTS)
+            .create(project2)
+            .then().spec(ValidationResponseSpecifications.checkProjectWithIdAlreadyExist(project2.getId()));
     }
 
 
@@ -167,20 +199,20 @@ public class ProjectTest extends BaseApiTest {
             .then().spec(ValidationResponseSpecifications.checkProjectContainsOnlyLatinLettersAndUnderscores(project.getId()));
     }
 
-    @Test(description = "SuperUser should not be able to create project with name length > 225",
+    @Test(description = "SuperUser should not be able to create project with id length > 225",
         groups = {"Negative", "Crud"})
     public void superUserCreatesProjectWithLongIdLength() {
-        testData.getProject().setId(RandomData.getString(PROJECT_ID_NAME_LENGTH_LIMIT + 1));
+        testData.getProject().setId(RandomData.getString(PROJECT_ID_LENGTH_LIMIT + 1));
 
         new UncheckedBase(Specifications.superUserSpec(), PROJECTS)
             .create(testData.getProject())
             .then().spec(ValidationResponseSpecifications.checkProjectIdsLengthLess255(testData.getProject().getId()));
     }
 
-    @Test(description = "System Admin should not be able to create project with name length > 225",
+    @Test(description = "System Admin should not be able to create project with id length > 225",
         groups = {"Negative", "Crud"})
     public void systemAdminCreatesProjectWithLongIdLength() {
-        testData.getProject().setId(RandomData.getString(PROJECT_ID_NAME_LENGTH_LIMIT + 1));
+        testData.getProject().setId(RandomData.getString(PROJECT_ID_LENGTH_LIMIT + 1));
 
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
@@ -221,6 +253,6 @@ public class ProjectTest extends BaseApiTest {
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
             .create(testData.getProject())
-            .then().spec(ValidationResponseSpecifications.checkUnauthUserCreatesProject());
+            .then().spec(ValidationResponseSpecifications.checkUnauthUserCreatesResource());
     }
 }

@@ -13,6 +13,13 @@ public class ValidationResponseSpecifications {
         return responseSpecBuilder.build();
     }
 
+    public static ResponseSpecification checkProjectWithIdAlreadyExist(String projectId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_BAD_REQUEST);
+        responseSpecBuilder.expectBody(Matchers.containsString("Project ID \"%s\" is already used by another project".formatted(projectId)));
+        return responseSpecBuilder.build();
+    }
+
     public static ResponseSpecification checkBuildTypeWithIdAlreadyExist(String buildTypeId) {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_BAD_REQUEST);
@@ -84,6 +91,27 @@ public class ValidationResponseSpecifications {
         return responseSpecBuilder.build();
     }
 
+    public static ResponseSpecification checkSearchProject(String searchQuery) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_NOT_FOUND);
+        responseSpecBuilder.expectBody(Matchers.containsString(("Nothing is found by locator 'count:1,%s'.\n" +
+                                                                    "Could not find the entity requested. Check the reference is correct" +
+                                                                    " and the user has permissions to access the entity.").
+                                                                   formatted(searchQuery)));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkBuildTypeIdsLengthLess255(String buildTypeId, int length) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody(Matchers.containsString(("Build configuration or template ID \"%s\" is invalid: it is %s" +
+                                                                    " characters long while the maximum length is 225." +
+                                                                    " ID should start with a latin letter and contain only latin letters," +
+                                                                    " digits and underscores (at most 225 characters).").
+                                                                   formatted(buildTypeId, buildTypeId.length())));
+        return responseSpecBuilder.build();
+    }
+
     public static ResponseSpecification checkUsersRoleCreateProject() {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_FORBIDDEN);
@@ -92,7 +120,7 @@ public class ValidationResponseSpecifications {
         return responseSpecBuilder.build();
     }
 
-    public static ResponseSpecification checkUnauthUserCreatesProject() {
+    public static ResponseSpecification checkUnauthUserCreatesResource() {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_UNAUTHORIZED);
         responseSpecBuilder.expectBody(Matchers.containsString("Incorrect username or password.\n" +

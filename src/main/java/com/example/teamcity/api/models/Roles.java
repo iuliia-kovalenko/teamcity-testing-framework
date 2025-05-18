@@ -16,9 +16,13 @@ import java.util.List;
 public class Roles extends BaseModel {
     private List<Role> role;
 
-    public static Roles generateRoles(Role role) {
+    public static Roles generateRoles(List<Role> roles) {
         return Roles.builder()
-                   .role(List.of(role))
+                   .role(roles)
                    .build();
+    }
+
+    public static Roles generateRoles(Role... roles) {
+        return generateRoles(List.of(roles));
     }
 }

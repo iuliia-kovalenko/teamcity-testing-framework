@@ -153,7 +153,7 @@ public class BuildTypeTest extends BaseApiTest {
     }
 
     @Test(description = "Unauthorized user should not be able to create BuildType")
-    public void unauthorizedUserCreatesBuildType() {
+    public void unauthorizedUserCreatesBuildTypeTest() {
         superUserCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)

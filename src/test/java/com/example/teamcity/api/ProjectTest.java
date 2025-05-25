@@ -38,7 +38,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "System admin should not be able to create project with empty name", groups = {"Negative", "Crud"})
-    public void systemAdminCreatesProjectWithEmptyName() {
+    public void systemAdminCreatesProjectWithEmptyNameTest() {
         superUserCheckRequests.<User>getRequest(USERS).create(testData.getUser());
 
         var projectWithEmptyName = testData.getProject();
@@ -51,7 +51,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "SuperUser should not be able to create project with empty name", groups = {"Negative", "Crud"})
-    public void superUserCreatesProjectWithEmptyName() {
+    public void superUserCreatesProjectWithEmptyNameTest() {
         var projectWithEmptyName = testData.getProject();
         projectWithEmptyName.setName("");
 
@@ -61,7 +61,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "System admin should not be able to create project with empty ID", groups = {"Negative", "Crud"})
-    public void systemAdminCreatesProjectWithEmptyId() {
+    public void systemAdminCreatesProjectWithEmptyIdTest() {
         superUserCheckRequests.<User>getRequest(USERS).create(testData.getUser());
 
         var project = testData.getProject();
@@ -73,7 +73,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "SuperUser should not be able to create project with empty ID", groups = {"Negative", "Crud"})
-    public void superUserCreatesProjectWithEmptyId() {
+    public void superUserCreatesProjectWithEmptyIdTest() {
         testData.getProject().setId("");
 
         new UncheckedBase(Specifications.superUserSpec(), PROJECTS)
@@ -82,7 +82,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "System admin should not be able to create project with the same name", groups = {"Negative", "Crud"})
-    public void systemAdminCreatesTwoProjectsWithTheSameIName() {
+    public void systemAdminCreatesTwoProjectsWithTheSameINameTest() {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
@@ -95,7 +95,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "SuperUser should not be able to create project with the same name", groups = {"Negative", "Crud"})
-    public void superUserCreatesTwoProjectsWithTheSameName() {
+    public void superUserCreatesTwoProjectsWithTheSameNameTest() {
         superUserCheckRequests.getRequest(PROJECTS).create(testData.getProject());
 
         new UncheckedBase(Specifications.superUserSpec(), PROJECTS)
@@ -104,7 +104,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "System admin should not be able to create project with the same ID", groups = {"Negative", "Crud"})
-    public void systemAdminCreatesTwoProjectsWithTheSameId() {
+    public void systemAdminCreatesTwoProjectsWithTheSameIdTest() {
         TestData testData1 = generate();
         TestData testData2 = generate();
         var project1 = testData1.getProject();
@@ -123,7 +123,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "SuperUser should not be able to create project with the same ID", groups = {"Negative", "Crud"})
-    public void superUserCreatesTwoProjectsWithTheSameId() {
+    public void superUserCreatesTwoProjectsWithTheSameIdTest() {
         TestData testData1 = generate();
         TestData testData2 = generate();
         var project1 = testData1.getProject();
@@ -147,7 +147,7 @@ public class ProjectTest extends BaseApiTest {
     @Test(dataProvider = "InvalidProjectIdsStartsWithNonLetter",
         description = "SuperUser should not be able to create project, that starts with non letter character and with non latin letters",
         groups = {"Negative", "Crud"})
-    public void superUserCreatesProjectWithInvalidCharacters(String invalidId) {
+    public void superUserCreatesProjectWithInvalidCharactersTest(String invalidId) {
         var project = testData.getProject();
         project.setId(invalidId);
 
@@ -159,7 +159,7 @@ public class ProjectTest extends BaseApiTest {
     @Test(dataProvider = "InvalidProjectIdsStartsWithNonLetter",
         description = "System Admin should not be able to create project, that starts with non letter character and with non latin letters",
         groups = {"Negative", "Crud"})
-    public void systemAdminCreatesProjectWithInvalidCharacters(String invalidId) {
+    public void systemAdminCreatesProjectWithInvalidCharactersTest(String invalidId) {
         var project = testData.getProject();
         project.setId(invalidId);
 
@@ -174,7 +174,7 @@ public class ProjectTest extends BaseApiTest {
 
     @Test(description = "SuperUser should not be able to create project with id, that contains non latin letters",
         groups = {"Negative", "Crud"})
-    public void superUserCreatesProjectWithNonLatinLetters() {
+    public void superUserCreatesProjectWithNonLatinLettersTest() {
         String invalidId = "кириллица";
         var project = testData.getProject();
         project.setId(invalidId);
@@ -186,7 +186,7 @@ public class ProjectTest extends BaseApiTest {
 
     @Test(description = "System Admin should not be able to create project with id, that contains non latin letters",
         groups = {"Negative", "Crud"})
-    public void systemAdminCreatesProjectWithNonLatinLetters() {
+    public void systemAdminCreatesProjectWithNonLatinLettersTest() {
         String invalidId = "кириллица";
         var project = testData.getProject();
         project.setId(invalidId);
@@ -201,7 +201,7 @@ public class ProjectTest extends BaseApiTest {
 
     @Test(description = "SuperUser should not be able to create project with id length > 225",
         groups = {"Negative", "Crud"})
-    public void superUserCreatesProjectWithLongIdLength() {
+    public void superUserCreatesProjectWithLongIdLengthTest() {
         testData.getProject().setId(RandomData.getString(PROJECT_ID_LENGTH_LIMIT + 1));
 
         new UncheckedBase(Specifications.superUserSpec(), PROJECTS)
@@ -211,7 +211,7 @@ public class ProjectTest extends BaseApiTest {
 
     @Test(description = "System Admin should not be able to create project with id length > 225",
         groups = {"Negative", "Crud"})
-    public void systemAdminCreatesProjectWithLongIdLength() {
+    public void systemAdminCreatesProjectWithLongIdLengthTest() {
         testData.getProject().setId(RandomData.getString(PROJECT_ID_LENGTH_LIMIT + 1));
 
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
@@ -235,7 +235,7 @@ public class ProjectTest extends BaseApiTest {
     @Test(dataProvider = "Roles",
         description = "Users with roles Project viewer, Project developer, Agent manager" +
                           " should not be able to create project of global scope")
-    public void userWithCertainRolesCreatesProject(RoleType roleType) {
+    public void userWithCertainRolesCreatesProjectTest(RoleType roleType) {
         Role role = Role.builder().roleId(roleType.getRoleId()).scope("g").build();
         var roles = Roles.builder().role(Collections.singletonList(role)).build();
         testData.getUser().setRoles(roles);
@@ -249,7 +249,7 @@ public class ProjectTest extends BaseApiTest {
     }
 
     @Test(description = "Unauthorized user should not be able to create Project")
-    public void unauthorizedUserCreatesProject() {
+    public void unauthorizedUserCreatesProjectTest() {
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
             .create(testData.getProject())

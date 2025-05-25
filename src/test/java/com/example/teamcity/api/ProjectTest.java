@@ -248,7 +248,7 @@ public class ProjectTest extends BaseApiTest {
             .then().spec(ValidationResponseSpecifications.checkUsersRoleCreateProject());
     }
 
-    @Test(description = "Unauthorized user should not be able to create Project")
+    @Test(description = "Unauthorized user should not be able to create Project", groups = {"Negative", "CRUD"})
     public void unauthorizedUserCreatesProjectTest() {
 
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)

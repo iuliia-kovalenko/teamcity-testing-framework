@@ -33,9 +33,11 @@ public class CreateBuildTypePage extends CreateBasePage {
     }
 
     @Step("Click submit button")
-    public CreateBuildTypePage submitBuildType() {
+    public CreateBuildTypePage submitBuildType(Boolean expectSuccessMessage) {
         submitButton.click();
-//        successMessage.should(Condition.visible, BASE_WAITING);
+        if (expectSuccessMessage) {
+            successMessage.shouldBe(Condition.visible, BASE_WAITING);
+        }
         return this;
     }
 

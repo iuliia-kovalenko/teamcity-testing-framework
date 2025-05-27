@@ -1,0 +1,89 @@
+<div>POST to http://localhost:8089/app/rest/buildQueue</div>
+
+    <h4>Body</h4>
+    <div>
+    <pre class="preformated-text">
+{
+    &quot;id&quot;: null,
+    &quot;taskId&quot;: null,
+    &quot;buildTypeId&quot;: null,
+    &quot;status&quot;: null,
+    &quot;state&quot;: null,
+    &quot;buildType&quot;: {
+        &quot;id&quot;: &quot;test_BqPpWuHSrX&quot;,
+        &quot;name&quot;: &quot;test_GWOnJHLdBx&quot;,
+        &quot;project&quot;: {
+            &quot;id&quot;: &quot;test_uJIYjTTqpR&quot;,
+            &quot;name&quot;: &quot;test_IpIntFwXwn&quot;,
+            &quot;locator&quot;: null
+        },
+        &quot;steps&quot;: {
+            &quot;count&quot;: 1,
+            &quot;step&quot;: [
+                {
+                    &quot;id&quot;: null,
+                    &quot;name&quot;: null,
+                    &quot;type&quot;: &quot;simpleRunner&quot;,
+                    &quot;properties&quot;: {
+                        &quot;count&quot;: null,
+                        &quot;property&quot;: [
+                            {
+                                &quot;name&quot;: null,
+                                &quot;value&quot;: null
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}    </pre>
+    </div>
+
+    <h4>Headers</h4>
+    <div>
+            <div>Accept: application/json, application/javascript, text/javascript, text/json</div>
+            <div>Content-Type: application/json</div>
+    </div>
+
+
+
+    <h4>Curl</h4>
+    <div>
+        curl -v -X POST &#39;http://localhost:8089/app/rest/buildQueue&#39; -H &#39;Accept: application/json, application/javascript, text/javascript, text/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;id&quot;: null,
+    &quot;taskId&quot;: null,
+    &quot;buildTypeId&quot;: null,
+    &quot;status&quot;: null,
+    &quot;state&quot;: null,
+    &quot;buildType&quot;: {
+        &quot;id&quot;: &quot;test_BqPpWuHSrX&quot;,
+        &quot;name&quot;: &quot;test_GWOnJHLdBx&quot;,
+        &quot;project&quot;: {
+            &quot;id&quot;: &quot;test_uJIYjTTqpR&quot;,
+            &quot;name&quot;: &quot;test_IpIntFwXwn&quot;,
+            &quot;locator&quot;: null
+        },
+        &quot;steps&quot;: {
+            &quot;count&quot;: 1,
+            &quot;step&quot;: [
+                {
+                    &quot;id&quot;: null,
+                    &quot;name&quot;: null,
+                    &quot;type&quot;: &quot;simpleRunner&quot;,
+                    &quot;properties&quot;: {
+                        &quot;count&quot;: null,
+                        &quot;property&quot;: [
+                            {
+                                &quot;name&quot;: null,
+                                &quot;value&quot;: null
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}&#39;
+    </div>
+

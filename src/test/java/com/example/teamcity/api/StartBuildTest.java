@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import static com.example.teamcity.api.enums.Endpoint.*;
 import static org.awaitility.Awaitility.await;
 
+@Test(groups = {"Regression"})
 public class StartBuildTest extends BaseApiTest {
     @Test(description = "Build can be executed and completed successfully", groups = {"Regression"})
     public void buildStartAndSuccessfulCompletionTest() {

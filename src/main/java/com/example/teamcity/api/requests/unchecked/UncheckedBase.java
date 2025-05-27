@@ -56,6 +56,7 @@ public class UncheckedBase extends Request implements CrudInterface, SearchInter
     }
 
     @Step("Search entity")
+    @Override
     public Response search(String searchField) {
         return RestAssured
                    .given()

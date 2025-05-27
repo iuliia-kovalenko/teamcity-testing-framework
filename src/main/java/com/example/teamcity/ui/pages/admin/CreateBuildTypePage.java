@@ -12,6 +12,8 @@ public class CreateBuildTypePage extends CreateBasePage {
     protected SelenideElement buildTypeNameInput = $("#buildTypeName");
     protected SelenideElement buildTypeRepoUrlInput = $("#url");
     protected SelenideElement repoUrlValidationError = $("#error_url");
+    protected SelenideElement successMessage = $("#unprocessed_objectsCreated");
+
 
     @Step("Open Create build type page")
     public static CreateBuildTypePage open(String projectId) {
@@ -31,8 +33,11 @@ public class CreateBuildTypePage extends CreateBasePage {
     }
 
     @Step("Click submit button")
-    public CreateBuildTypePage submitBuildType() {
+    public CreateBuildTypePage submitBuildType(Boolean expectSuccessMessage) {
         submitButton.click();
+        if (expectSuccessMessage) {
+            successMessage.shouldBe(Condition.visible, BASE_WAITING);
+        }
         return this;
     }
 

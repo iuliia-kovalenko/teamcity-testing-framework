@@ -30,7 +30,7 @@ public class CreateBuildTypeTest extends BaseUiTest {
         CreateBuildTypePage.open(testData.getProject().getId())
             .createForm(REPO_URL)
             .inputBuildTypeName(testData.getBuildType().getName())
-            .submitBuildType();
+            .submitBuildType(true);
 
         // Проверка состояния API
         // Корректность отправки данных с UI на API
@@ -58,7 +58,7 @@ public class CreateBuildTypeTest extends BaseUiTest {
 
         var errorMessage = CreateBuildTypePage.open(testData.getProject().getId())
                                .inputRepoUrl(INVALID_REPO_URL)
-                               .submitBuildType()
+                               .submitBuildType(false)
                                .getRepoUrlValidationErrorMessage();
 //        softy.assertTrue(errorMessage.contains("git -c credential.helper= ls-remote origin command failed.\n" +
 //                                                   "exit code: 128"));
@@ -78,7 +78,7 @@ public class CreateBuildTypeTest extends BaseUiTest {
         var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
         var errorMessage = CreateBuildTypePage.open(testData.getProject().getId())
-                               .submitBuildType()
+                               .submitBuildType(false)
                                .getRepoUrlValidationErrorMessage();
 
 //        softy.assertEquals(errorMessage, "URL must not be empty");

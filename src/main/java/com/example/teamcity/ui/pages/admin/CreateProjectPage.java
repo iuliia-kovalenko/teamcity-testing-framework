@@ -12,6 +12,8 @@ public class CreateProjectPage extends CreateBasePage {
     private static final String PROJECT_SHOW_MODE = "createProjectMenu";
     private SelenideElement projectNameInput = $("#projectName");
     private SelenideElement refreshButton = $("#updateDiscoveryContainer");
+    private SelenideElement emptyProjectNameErrorMessage = $(".error#error_projectName");
+
 
     @Step("Open Create project page")
     public static CreateProjectPage open(String projectId) {
@@ -25,13 +27,23 @@ public class CreateProjectPage extends CreateBasePage {
         return this;
     }
 
-    @Step("Input project name, input build type name, ckick submit button")
-    public void setUpProject(String projectName, String buildTypeName) {
+    @Step("Input project name, input build type name, click submit button")
+    public CreateProjectPage setUpProject(String projectName, String buildTypeName, Boolean expectRefreshButton) {
         projectNameInput.val(projectName);
         buildtypeNameInput.val(buildTypeName);
         submitButton.click();
-        refreshButton.shouldBe(Condition.visible, BASE_WAITING);
+
+        if (expectRefreshButton) {
+            refreshButton.shouldBe(Condition.visible, BASE_WAITING);
+        }
 
 //        return page(ProjectsPage.class);
+        return this;
+    }
+
+    @Step("Get empty project name validation message")
+    public String getEmptyProjectNameValidationErrorMessage() {
+        emptyProjectNameErrorMessage.should(Condition.visible, BASE_WAITING);
+        return emptyProjectNameErrorMessage.text();
     }
 }

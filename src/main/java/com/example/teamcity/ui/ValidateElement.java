@@ -14,7 +14,9 @@ public class ValidateElement {
                                                   "fatal: Could not read from remote repository.\n" +
                                                   "\n" +
                                                   "Please make sure you have the correct access rights\n" +
-                                                  "and the repository exists.");
+                                                  "and the repository exists."),
+        PROJECT_NAME_MUST_NOT_BE_EMPTY("Project name must not be empty"),
+        PROJECT_NOT_FOUND("Nothing found");
 
         private final String message;
 

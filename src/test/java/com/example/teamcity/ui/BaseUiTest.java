@@ -35,7 +35,7 @@ public class BaseUiTest extends BaseTest {
     }
 
     protected void loginAs(User user) {
-        superUserCheckRequests.getRequest(Endpoint.USERS).create(testData.getUser());
-        LoginPage.open().login(testData.getUser());
+        superUserCheckRequests.getRequest(Endpoint.USERS).create(user);
+        LoginPage.open().login(user);
     }
 }

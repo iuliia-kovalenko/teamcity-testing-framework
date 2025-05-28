@@ -15,14 +15,14 @@ public class CreateProjectTest extends BaseUiTest {
     private static final String REPO_URL = "https://github.com/iuliia-kovalenko/teamcity-testing-framework";
 
     @Test(description = "User should be able to create project", groups = {"Positive"})
-    public void userCreatesProject() {
+    public void userCreatesProjectTest() {
         // Подготовка окружения
         loginAs(testData.getUser());
 
         // взаимодействие с UI
         CreateProjectPage.open("_Root")
             .createForm(REPO_URL)
-            .setUpProject(testData.getProject().getName(), testData.getBuildType().getName());
+            .setUpProject(testData.getProject().getName(), testData.getBuildType().getName(), true);
 
 
         // Проверка состояния API
@@ -43,25 +43,31 @@ public class CreateProjectTest extends BaseUiTest {
     }
 
     @Test(description = "User should not be able to create Project without name", groups = {"Negative"})
-    public void userCreatesProjectWithoutName() {
+    public void userCreatesProjectWithoutNameTest() {
         // подготовка окружения
-        step("Login as user");
-        step("Check number of projects");
+
+        loginAs(testData.getUser());
+        var projectsBefore = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).read("");
+        String projectsCountBefore = projectsBefore.getCount();
 
         // взаимодействие с UI
-        step("Open 'Create project page' (http://localhost:8112/admin/createObjectMenu.html)");
-        step("Send all project parameters (repository URL)");
-        step("Click 'Proceed'");
-        step("Set Project Name value is empty");
-        step("Click 'Proceed'");
+
+        String errorMessage = CreateProjectPage.open("_Root")
+                                  .createForm(REPO_URL)
+                                  .setUpProject("", testData.getBuildType().getName(), false)
+                                  .getEmptyProjectNameValidationErrorMessage();
 
         // Проверка состояния API
         // Корректность отправки данных с UI на API
-        step("Check that amount of projects did not change");
+
+        ValidateElement.containsText(errorMessage, ValidateElement.UiErrors.PROJECT_NAME_MUST_NOT_BE_EMPTY);
 
 
         // Проверка состояния UI
         // Корректность считывания данных и отображение данных на UI
-        step("Check that error appears 'Project name must not be empty'");
+
+        var projectsAfter = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS).read("");
+        String projectsCountAfter = projectsAfter.getCount();
+        softy.assertEquals(projectsCountAfter, projectsCountBefore, "The quantity After is not equal the quantity before");
     }
 }

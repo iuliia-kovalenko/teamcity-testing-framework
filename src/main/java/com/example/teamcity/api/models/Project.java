@@ -19,4 +19,5 @@ public class Project extends BaseModel{
     @Random
     private String name;
     private String locator;
+    private String count;
 }
